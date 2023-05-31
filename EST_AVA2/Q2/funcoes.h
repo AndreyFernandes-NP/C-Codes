@@ -1,4 +1,0 @@
-﻿// Structs
-
-// Funções
-
