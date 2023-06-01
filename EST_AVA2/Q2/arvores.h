@@ -1,7 +1,7 @@
 // Structs
 
 typedef struct NodeArv {
-  int chave, prof;
+  int chave;
   struct NodeArv *esq;
   struct NodeArv *dir;
 }NodeArv;
@@ -13,69 +13,127 @@ typedef struct {
 
 // Funções
 
-NodeArv* inserir(NodeArv *raiz, int valor){
-  if(raiz == NULL){
+int INSERIRARV(){
+  int valor;
+  printf("Valor a ser inserido: ");
+  scanf("%d", &valor);
+  return valor;
+}
+
+NodeArv* INSERCAO(NodeArv *RAIZ, int valor){
+  if(RAIZ == NULL){
     NodeArv *novo = (NodeArv*)malloc(sizeof(NodeArv));
     novo->chave = valor;
-    novo->prof++;
     novo->esq = NULL;
     novo->dir = NULL;
     return novo;
   }else{
-    if(valor < raiz->chave){
-      raiz->esq = inserir(raiz->esq, valor);
+    if(valor < RAIZ->chave){
+      RAIZ->esq = INSERCAO(RAIZ->esq, valor);
     }
-    if(valor > raiz->chave){
-      raiz->dir = inserir(raiz->dir, valor);
+    if(valor > RAIZ->chave){
+      RAIZ->dir = INSERCAO(RAIZ->dir, valor);
     }
-    return raiz;
+    return RAIZ;
   }
 }
 
-NodeArv* remover(NodeArv *raiz, int item){
-  if(raiz == NULL){
+int REMOVERARV(){
+  int item;
+  printf("Valor a ser removido: ");
+  scanf("%d", &item);
+  return item;
+}
+
+NodeArv* REMOCAO(NodeArv *RAIZ, int item){
+  if(RAIZ == NULL){
     printf("Valor não encontrado!\n");
     return NULL;
   }else{
-    if(raiz->chave == item){
-      if(raiz->esq == NULL && raiz->dir == NULL){
-        free(raiz);
+    if(RAIZ->chave == item){
+      if(RAIZ->esq == NULL && RAIZ->dir == NULL){
+        free(RAIZ);
         return NULL;
       }else{
-        if(raiz->esq == NULL || raiz->dir == NULL){
+        if(RAIZ->esq == NULL || RAIZ->dir == NULL){
           NodeArv *aux;
-          if(raiz->esq != NULL){
-            aux = raiz->esq;
+          if(RAIZ->esq != NULL){
+            aux = RAIZ->esq;
           }else{
-            aux = raiz->esq;
+            aux = RAIZ->esq;
           }
-          free(raiz);
+          free(RAIZ);
           return aux;
         }else{
-          NodeArv *aux = raiz->esq;
+          NodeArv *aux = RAIZ->esq;
           while(aux->dir != NULL){
             aux = aux->dir;
           }
-          raiz->chave = aux->chave;
+          RAIZ->chave = aux->chave;
           aux->chave = item;
-          raiz->esq = remover(raiz->esq, item);
+          RAIZ->esq = REMOCAO(RAIZ->esq, item);
         }
       }
     }else{
-      if(item < raiz->chave){
-        raiz->esq = remover(raiz->esq, item);
+      if(item < RAIZ->chave){
+        RAIZ->esq = REMOCAO(RAIZ->esq, item);
       }else{
-        raiz->dir = remover(raiz->dir, item);
+        RAIZ->dir = REMOCAO(RAIZ->dir, item);
       }
-      return raiz;
+      return RAIZ;
     }
   }
 }
 
-void imprimir(NodeArv *raiz){
-  if(raiz != NULL){
-    imprimir(raiz->esq);
-    printf("Chave: %d / Profundidade: %d\n", raiz->chave, raiz->prof);
-    imprimir(raiz->dir);
+void INORDER(NodeArv *RAIZ){
+  if(RAIZ != NULL){
+    INORDER(RAIZ->esq);
+    printf("Chave: %d\n", RAIZ->chave);
+    INORDER(RAIZ->dir);
+  }
+}
+
+int BUSCARARV(){
+  int elemento;
+  printf("Elemento a ser procurado: ");
+  scanf("%d", &elemento);
+  return elemento;
+}
+
+void PROCURA(NodeArv *RAIZ, int elemento){
+  if(RAIZ == NULL){
+    printf("Elemento não encontrado na árvore.\n");
+    return;
+  }else{
+    if(RAIZ->chave == elemento){
+      printf("Elemento encontrado na árvore!\n");
+    }else{
+      if(RAIZ->chave > elemento){
+        PROCURA(RAIZ->esq, elemento);
+      }else{
+        PROCURA(RAIZ->dir, elemento);
+      }
+    }
+  }
+}
+
+void OFFORDER(NodeArv *RAIZ){
+  if(RAIZ != NULL){
+    OFFORDER(RAIZ->dir);
+    printf("Chave: %d\n", RAIZ->chave);
+    OFFORDER(RAIZ->esq);
+  }
+}
+
+void MAIORARV(NodeArv *RAIZ){
+  if(RAIZ == NULL){
+    printf("Nenhum elemento encontrado na árvore.\n");
+    return;
+  }else{
+    if(RAIZ->dir == NULL){
+      printf("Maior elemento da árvore: %d\n", RAIZ->chave);
+    }else{
+      MAIORARV(RAIZ->dir);
+    }
   }
 }
